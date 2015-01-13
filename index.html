@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Search</title>
+</head>
+<body>
+  <section ng-controller='MainCtrl'>
+    <article>
+      <input type="text" ng-model='keyword' ng-keypress='suggest()' />
+
+      <ul class="dropdown" ng-show='suggestions.length > 0' ng-hide='suggestions.length <= 0'>
+        <li ng-repeat='item in suggestions'>{{item}}</li> 
+      </ul>
+    </article>
+  </section>
+
+  <script src='/bower_components/angular/angular.min.js'></script>
+  <script src='/js/main.js'></script>
+</body>
+</html>
