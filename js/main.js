@@ -1,4 +1,16 @@
-function MainCtrl($log, $scope, $http, $sce) {
+function suggestions($http) {
+  return function (keyword) {
+    return $http.get('http://localhost:3000/api/livesearch/suggestion?q=' + keyword);
+  };
+} 
+
+function highlights($http) {
+  return function (keyword) {
+    return $http.get('http://localhost:3000/api/livesearch/highlight?q=' + keyword);
+  };
+}
+
+function MainCtrl($log, $scope, $http, $sce, suggestions) {
   $scope.$sce = $sce;
   $scope.suggestions = [];
   $scope.result = [];
@@ -21,13 +33,11 @@ function MainCtrl($log, $scope, $http, $sce) {
 
   $scope.suggest = function (key) {
     if (key !== 13) {
-      $http
-        .get('http://localhost:3000/api/livesearch/suggestion?q=' + $scope.keyword)
+      suggestions($scope.keyword)
         .then(suggestSuccess, suggestFail);
     } else if (key === 13) {
       $scope.suggestions = [];
-      $http
-        .get('http://localhost:3000/api/livesearch/highlight?q=' + $scope.keyword)
+      highlights($scope.keyword)
         .then(highlightSuccess, highlightFail);
     }
   };
@@ -38,6 +48,8 @@ function runHandler($log) {
 }
 angular
   .module('livesearch', [])
+  .factory('suggestions', suggestions)
+  .factory('highlights', highlights)
   .controller('MainCtrl', MainCtrl)
   .run(runHandler);
 
