@@ -1,4 +1,5 @@
-function MainCtrl($log, $scope, $http) {
+function MainCtrl($log, $scope, $http, $sce) {
+  $scope.$sce = $sce;
   $scope.suggestions = [];
   $scope.result = [];
 
@@ -19,13 +20,12 @@ function MainCtrl($log, $scope, $http) {
   }
 
   $scope.suggest = function (key) {
-    $scope.suggestions = [];
-
     if (key !== 13) {
       $http
         .get('http://localhost:3000/api/livesearch/suggestion?q=' + $scope.keyword)
         .then(suggestSuccess, suggestFail);
     } else if (key === 13) {
+      $scope.suggestions = [];
       $http
         .get('http://localhost:3000/api/livesearch/highlight?q=' + $scope.keyword)
         .then(highlightSuccess, highlightFail);

@@ -7,11 +7,19 @@
 <body>
   <section ng-controller='MainCtrl'>
     <article>
-      <input type="text" ng-model='keyword' ng-keypress='suggest()' />
+      <input type="text" ng-model='keyword' ng-keypress='suggest($event.keyCode)' />
+    </article>
 
-      <ul class="dropdown" ng-show='suggestions.length > 0' ng-hide='suggestions.length <= 0'>
+    <article ng-show='suggestions.length' ng-hide='!suggestions.length'>
+      <ul class="dropdown">
         <li ng-repeat='item in suggestions'>{{item}}</li> 
       </ul>
+    </article>
+
+    <br>
+
+    <article ng-show='result.length' ng-hide='!result.length' ng-repeat='item in result'>
+      <a ng-href='{{item.url}}' ng-bind-html='$sce.trustAsHtml(item.title)' target='_blank'></a>
     </article>
   </section>
 
